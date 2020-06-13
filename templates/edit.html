@@ -1,0 +1,20 @@
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css" media="screen">
+            @import url("assets/css/style.css");
+        </style>
+        <title>投稿アプリ</title>
+    </head>
+    <body>
+        <form method="post" action="/edit/{{ .Editpost.ID}}">
+            <h1>編集フォーム</h1>
+            <textarea  name="text">
+                {{ .Editpost.Text}}
+            </textarea>
+            <div class="submit">
+                <input class="submit-button" type="submit" value="送信">
+            </div>
+        </form>
+    </body>
+</html>

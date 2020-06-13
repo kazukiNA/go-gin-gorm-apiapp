@@ -1,0 +1,28 @@
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css" media="screen">
+            @import url("assets/css/style.css");
+        </style>
+        <title>投稿アプリ</title>
+    </head>
+    <body>
+        <form method="post" action="/register">
+            <h1>新規登録</h1>
+            <div class="emeil-form">
+                <label for="email">メールアドレス</label>
+                <input type="email" name="email">
+            </div>
+            <div class="password-form">
+                <label for="password">パスワード</label>
+                <input type="password" name="password">
+            </div>
+            <div class="submit">
+                <input class="submit-button" type="submit" value="登録する">
+            </div>
+        </form>
+        <div class="">
+            <a href="/login">登録済みの方はこちらへ</a>
+        </div>
+    </body>
+</html>

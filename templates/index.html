@@ -1,0 +1,32 @@
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <style type="text/css" media="screen">
+            @import url("assets/css/style.css");
+        </style>
+        <title>投稿アプリ</title>
+    </head>
+    <body>
+        <form method="post" action="/menu/create">
+            <h1>投稿フォーム</h1>
+            <input type="hidden" value={{.Email}} name="email">
+            <textarea  name="text">
+
+            </textarea>
+            <div class="submit">
+                <input class="submit-button" type="submit" value="送信">
+            </div>
+        </form>
+        {{.Email}}<a href="/logout">ログアウト</a>
+            {{ range .posts}}
+                <hr>
+                <div class="content">
+                    <p>内容：{{.Text}}</p>
+                    <p>作成日時：{{.JPTime}}</p>
+                    <p>作成者：{{.UserEmail}}</p>
+                    <a href='/delete/{{.ID}}' class="btn btn-primary btn-sm">削除</a>
+                    <a href='/edit/{{.ID}}' class="btn btn-primary btn-sm">編集</a>
+                </div>
+            {{end}}
+    </body>
+</html>
