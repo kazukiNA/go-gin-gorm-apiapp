@@ -5,22 +5,39 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"log"
 	"net/http"
-	sessioninfo "postapp/SessionInfo"
 	"strconv"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	"postapp/models"
 	_ "github.com/go-sql-driver/mysql"
 	"time"
 )
+
+type SessionInfo struct {
+	Email interface{}
+}
+
+type User struct {
+	gorm.Model
+	Email string
+	Password []byte
+	Posts []Post
+}
+
+type Post struct{
+	gorm.Model
+	Text string
+	JPTime string
+	UserRefer uint
+	UserEmail string
+}
 
 func db_init(){
 	db, err := gorm.Open("mysql", "root:secret@/postapp?charset=utf8&parseTime=True")
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&User{})
 }
 
 func createPost(text string, email string, updatedat string){
@@ -28,7 +45,7 @@ func createPost(text string, email string, updatedat string){
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	db.Create(&models.Post{Text: text, UserEmail: email, JPTime: updatedat})
+	db.Create(&Post{Text: text, UserEmail: email, JPTime: updatedat})
 	//db.AutoMigrate(&models.Post{})
 }
 
@@ -37,36 +54,36 @@ func createUser(email string, password []byte){
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	db.Create(&models.User{Email: email, Password: password})
+	db.Create(&User{Email: email, Password: password})
 }
 
-func getPostALL() []models.Post{
+func getPostALL() []Post{
 	db, err := gorm.Open("mysql", "root:secret@/postapp?charset=utf8&parseTime=True")
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	var post []models.Post
+	var post []Post
 	db.Find(&post)
 	return post
 }
 
-func getPostOne(id int) models.Post{
+func getPostOne(id int) Post{
 	db, err := gorm.Open("mysql", "root:secret@/postapp?charset=utf8&parseTime=True")
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	var post models.Post
+	var post Post
 	db.First(&post,id)
 	db.Close()
 	return post
 }
 
-func getUser(email string) models.User{
+func getUser(email string) User{
 	db, err := gorm.Open("mysql", "root:secret@/postapp?charset=utf8&parseTime=True")
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	var user models.User
+	var user User
 	db.First(&user, "email=?",email)
 	db.Close()
 	return user
@@ -78,7 +95,7 @@ func deletePost(id int){
 		panic("failed to connect database\n")
 	}
 	defer db.Close()
-	var post models.Post
+	var post Post
 	db.First(&post,id)
 	db.Delete(&post)
 }
@@ -89,7 +106,7 @@ func updatePost(id int, text string){
 		panic("failed to connect database\n")
 	}
 	defer db.Close()
-	var post models.Post
+	var post Post
 	db.First(&post,id)
 	post.Text = text
 	post.JPTime = time.Now().Format("2006-01-02")
@@ -150,7 +167,7 @@ func GetMenu(ctx *gin.Context){
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	var post []models.Post
+	var post []Post
 	db.Find(&post)
 	log.Println(len(post))
 	router := gin.Default()
@@ -171,7 +188,7 @@ func GetSign(ctx *gin.Context){
 	if err != nil {
 		panic("failed to connect database\n")
 	}
-	var post []models.Post
+	var post []Post
 	db.Find(&post)
 	log.Println(len(post))
 	router := gin.Default()
@@ -192,7 +209,7 @@ func PostLogout(ctx *gin.Context){
 	return db.Where(&models.User{}{Email:email})
 }*/
 
-var LoginInfo sessioninfo.SessionInfo
+var LoginInfo SessionInfo
 
 func main() {
 	//router.Router()
@@ -209,7 +226,7 @@ func main() {
 		panic("failed to connect database\n")
 	}
 
-	db.AutoMigrate(&models.User{},&models.Post{})
+	db.AutoMigrate(&User{},&Post{})
 
 	menu := router.Group("/menu")
 	menu.Use(sessionCheck())
