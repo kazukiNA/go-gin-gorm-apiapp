@@ -6,14 +6,14 @@
         </style>
         <title>投稿アプリ</title>
     </head>
-    <body>
+    <body style="width: 50%; margin: 0 auto; text-align: center">
         <form method="post" action="/edit/{{ .Editpost.ID}}">
-            <h1>編集フォーム</h1>
-            <textarea  name="text">
+            <h1 style="color: blue;">編集フォーム</h1>
+            <textarea  name="text" style="padding:50px 20px; resize: none; width: 100%; height: 120px;">
                 {{ .Editpost.Text}}
             </textarea>
-            <div class="submit">
-                <input class="submit-button" type="submit" value="送信">
+            <div class="submit" style="margin: 40px 0;">
+                <input class="submit-button" type="submit" style="width: 40%;" value="送信">
             </div>
         </form>
     </body>

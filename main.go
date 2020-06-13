@@ -309,6 +309,7 @@ func main() {
 			panic(err)
 		}
 		deletePost(id)
+
 		ctx.Redirect(302,"/menu/top")
 	})
 

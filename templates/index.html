@@ -17,7 +17,9 @@
                 <input class="submit-button" type="submit" value="送信">
             </div>
         </form>
-        {{.Email}}<a href="/logout">ログアウト</a>
+        {{.Email}}
+        <br>
+        <a href="/logout">ログアウト</a>
             {{ range .posts}}
                 <hr>
                 <div class="content">
